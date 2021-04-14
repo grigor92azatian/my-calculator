@@ -47,10 +47,12 @@ function operate(operator, firstNum, secondNum){
 }
 
 let displayThis = "";
-let userInputString = "";
+let currentInput = "";
+let userOperator;
 let userNumber1;
 let userNumber2;
-let userOperator;
+let result;
+let displayString = "";
 
 //reference to all buttons
 let numberButtons = [document.querySelector("#zero"), document.querySelector("#one"), document.querySelector("#two"), document.querySelector("#three"), 
@@ -68,17 +70,26 @@ let displayArea = document.querySelector("#display");
 //numbers
 for(let i=0;i<numberButtons.length;i++){
         numberButtons[i].addEventListener("click", function(){
-        userInputString += numberButtons[i].innerText;
-        displayArea.innerText = userInputString;
+        displayString += currentInput;
+        currentInput += numberButtons[i].innerText;
+        
+        //currentInput = "";
+        //displayArea.innerText = displayString;
+        console.log({currentInput});
     });
 }
 //operators
 operatorButtons.forEach(element => {
     element.addEventListener("click",function(){
-        //ensure last character in userInputString is NOT another operator
-        if(isNaN(userInputString[userInputString.length-1]) === false){
-            userInputString += element.innerText;
-            displayArea.innerText = userInputString;
+        //ensure last character in currentInput is NOT another operator
+        if(isNaN(currentInput[currentInput.length-1]) === false){
+            userNumber1 = parseInt(currentInput);
+            userOperator = element.innerText;
+            currentInput = "";
+
+            displayString += " "+element.innerText+" ";
+            //displayArea.innerText = currentInput;
+            console.log({currentInput});
         }
     });
 });
@@ -86,9 +97,21 @@ operatorButtons.forEach(element => {
 
 //equals
 
+equalsButton.addEventListener("click", function(){
+    userNumber2 = parseInt(currentInput);
+    result = operate(userOperator, userNumber1, userNumber2);
+    console.log({userNumber1}, {userNumber2}, {userOperator}, {result});
+});
+
 //clear
 clearButton.addEventListener("click",function(){
-    userInputString = "";
+    displayThis = "";
+    currentInput = "";
+    userOperator = "";
+    userNumber1 = "";
+    userNumber2 = "";
+    result = 0;
+    displayString = "";
     displayArea.innerText = "";
 });
 
@@ -124,9 +147,3 @@ clearButton.addEventListener("click",function(){
     //3. 
 
 
-
-let testString = "34353468234+234+23+"
-console.log(typeof parseInt(testString[testString.length-1]));
-
-
-console.log(isNaN("+"));
