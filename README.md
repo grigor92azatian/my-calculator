@@ -1,0 +1,1 @@
+Project assigned by "The Odin Project". The goal is to make a functioning calculator web app that runs basic arithmetic functions(add,subtract,mulitpy,divide);
