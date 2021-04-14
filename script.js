@@ -47,21 +47,69 @@ function operate(operator, firstNum, secondNum){
 }
 
 let displayThis = "";
+let userInputString = "";
+let userNumber1;
+let userNumber2;
+let userOperator;
 
-let documentCalculator = document.querySelector("#calculator-container");   //refernce element containing all buttons
-let arrayOfButtons = [...documentCalculator.querySelectorAll("button")];    //select all buttons and assign to array 
-let arrayOfButtonSelectors = arrayOfButtons.map(function(button){
-    return "#"+button.id;
-});
-let arrayOfButtonReferences = arrayOfButtonSelectors.map(function(selector){
-    return document.querySelector(selector);                                //(THIS MIGHT BE REDUNDANT)
-});
-for (let i=0;i<arrayOfButtonReferences.length;i++){
-    arrayOfButtonReferences[i].addEventListener("click", function(){        //assign event listener to all buttons
-        displayThis += arrayOfButtonReferences[i].innerText;
-        display.innerText = displayThis;
+//reference to all buttons
+let numberButtons = [document.querySelector("#zero"), document.querySelector("#one"), document.querySelector("#two"), document.querySelector("#three"), 
+                    document.querySelector("#four"), document.querySelector("#five"), document.querySelector("#six"), document.querySelector("#seven"), 
+                    document.querySelector("#eight"), document.querySelector("#nine")];
+let operatorButtons = [document.querySelector("#add"), document.querySelector("#subtract"), document.querySelector("#multiply"), document.querySelector("#divide")];
+let decimalButton = document.querySelector("#decimal");
+let equalsButton = document.querySelector("#equals");
+let clearButton = document.querySelector("#clear");
+
+//reference to display area
+let displayArea = document.querySelector("#display");
+
+//button eventListeners
+//numbers
+for(let i=0;i<numberButtons.length;i++){
+        numberButtons[i].addEventListener("click", function(){
+        userInputString += numberButtons[i].innerText;
+        displayArea.innerText = userInputString;
     });
 }
+//operators
+operatorButtons.forEach(element => {
+    element.addEventListener("click",function(){
+        //ensure last character in userInputString is NOT another operator
+        if(isNaN(userInputString[userInputString.length-1]) === false){
+            userInputString += element.innerText;
+            displayArea.innerText = userInputString;
+        }
+    });
+});
+//decimal
+
+//equals
+
+//clear
+clearButton.addEventListener("click",function(){
+    userInputString = "";
+    displayArea.innerText = "";
+});
+
+
+
+
+
+// let documentCalculator = document.querySelector("#calculator-container");   //refernce element containing all buttons
+// let arrayOfButtons = [...documentCalculator.querySelectorAll("button")];    //select all buttons and assign to array 
+// let arrayOfButtonSelectors = arrayOfButtons.map(function(button){
+//     return "#"+button.id;
+// });
+// let arrayOfButtonReferences = arrayOfButtonSelectors.map(function(selector){
+//     return document.querySelector(selector);                                //(THIS MIGHT BE REDUNDANT)
+// });
+// for (let i=0;i<arrayOfButtonReferences.length;i++){
+//     arrayOfButtonReferences[i].addEventListener("click", function(){        //assign event listener to all buttons
+//         displayThis += arrayOfButtonReferences[i].innerText;
+//         display.innerText = displayThis;
+//     });
+// }
 
 
 //button behavior
@@ -70,5 +118,15 @@ for (let i=0;i<arrayOfButtonReferences.length;i++){
     //clear button - clears contents of displayThis
     //equals button - evaluates string from left to right, one pair of numbers at a time and then sends final result to displayThis
 
+//Rules
+    //1. Cannot chain multiple operators consecutively: "234++-223"
+    //2. Cannot have more than 1 decimal point in a number: "23.345.3+23"
+    //3. 
 
 
+
+let testString = "34353468234+234+23+"
+console.log(typeof parseInt(testString[testString.length-1]));
+
+
+console.log(isNaN("+"));
