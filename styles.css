@@ -29,30 +29,41 @@ body{
     font-size: 40px;
 }
 
-#operator-container{
+.five-per-row{
     width: 100%;
     display: flex;
     justify-content: space-around;
     height: 16%;
 }
-
-.number-container{
+.three-per-row{
     display: flex;
     justify-content: space-around;
     align-items: center;
     height: 16%;
 }
-.operator-button, .number-button{
+.button{
     font-size: 40px;
     height: 95%;
     border-radius: 25px;
     border-color: black;
+    outline: none;
 }
 .operator-button{
-    width: 19%;
+    background-color: darkorange;
+}
+.operator-button:active{
     background-color: orange;
 }
+.five-per-row button{
+    width:19%
+}
 .number-button{
-    width: 32%;
     background-color: grey;
 }
+.number-button:active{
+    background-color: darkgrey;
+}
+.three-per-row button{
+    width: 32%;
+}
+

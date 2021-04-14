@@ -45,6 +45,12 @@ function operate(operator, firstNum, secondNum){
         return divide(firstNum,secondNum);
     }
 }
+let displayThis;
+let display = document.querySelector("#display");
+let button1 = document.querySelector("#one");
+button1.addEventListener("click",function(){
+    displayThis = 1;
+    display.innerText = displayThis;
+});
 
-console.log(operate("/", 4, 8));
 
