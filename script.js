@@ -45,12 +45,30 @@ function operate(operator, firstNum, secondNum){
         return divide(firstNum,secondNum);
     }
 }
-let displayThis;
-let display = document.querySelector("#display");
-let button1 = document.querySelector("#one");
-button1.addEventListener("click",function(){
-    displayThis = 1;
-    display.innerText = displayThis;
+
+let displayThis = "";
+
+let documentCalculator = document.querySelector("#calculator-container");   //refernce element containing all buttons
+let arrayOfButtons = [...documentCalculator.querySelectorAll("button")];    //select all buttons and assign to array 
+let arrayOfButtonSelectors = arrayOfButtons.map(function(button){
+    return "#"+button.id;
 });
+let arrayOfButtonReferences = arrayOfButtonSelectors.map(function(selector){
+    return document.querySelector(selector);                                //(THIS MIGHT BE REDUNDANT)
+});
+for (let i=0;i<arrayOfButtonReferences.length;i++){
+    arrayOfButtonReferences[i].addEventListener("click", function(){        //assign event listener to all buttons
+        displayThis += arrayOfButtonReferences[i].innerText;
+        display.innerText = displayThis;
+    });
+}
+
+
+//button behavior
+    //numbers and +,-,x,/ will send contents to displayThis variable that will store the string
+    //decimal button = displayThis will ONLY allow 1 decimal point BETWEEN operator clicks (single number is only allowed a single decimal)
+    //clear button - clears contents of displayThis
+    //equals button - evaluates string from left to right, one pair of numbers at a time and then sends final result to displayThis
+
 
 
