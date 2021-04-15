@@ -1,3 +1,4 @@
+//----------------------------------------------FUNCTIONS---------------------------------------------
 function add(firstNum, secondNum){
     return firstNum+secondNum;
 }
@@ -35,37 +36,36 @@ function roundToXDec(num, xDec){            //round num to xDec decimal points -
 }
 
 function operate(operator, firstNum, secondNum){
+    let result;
     if(operator==="+"){
-        return add(firstNum,secondNum);
+        result = add(firstNum,secondNum);
     }else if(operator==="-"){
-        return subtract(firstNum,secondNum);
+        result = subtract(firstNum,secondNum);
     }else if(operator==="x"){
-        return multiply(firstNum,secondNum);
+        result = multiply(firstNum,secondNum);
     }else if(operator==="/"){
-        return divide(firstNum,secondNum);
+        result = divide(firstNum,secondNum);
     }
+    return roundToXDec(result,5);
 }
 
 function clearAll(){
-    displayThis = "";
     currentInput = "";
     userOperator = "";
     userNumber1 = "";
     userNumber2 = "";
     result = 0;
-    displayString = "";
+    displayThis = "";
 }
-
+//-----------------------------VARIABLES------------------------------------------------
 let currentInput = "";
 let userOperator;
 let userNumber1;
 let userNumber2;
 let result;
-
-let displayString = "";
 let displayThis = "";
 
-//reference to all buttons
+//-----------------------------BUTTON REFERENCES-----------------------------------------
 let numberButtons = [document.querySelector("#zero"), document.querySelector("#one"), document.querySelector("#two"), document.querySelector("#three"), 
                     document.querySelector("#four"), document.querySelector("#five"), document.querySelector("#six"), document.querySelector("#seven"), 
                     document.querySelector("#eight"), document.querySelector("#nine")];
@@ -74,77 +74,84 @@ let decimalButton = document.querySelector("#decimal");
 let equalsButton = document.querySelector("#equals");
 let clearButton = document.querySelector("#clear");
 
-//reference to display area
+//-----------------------------DISPLAY AREA REFERENCE---------------------------------------
 let displayArea = document.querySelector("#display");
 
-//button eventListeners
-//numbers
+//------------------------------BUTTON EVENT LISTENERS---------------------------------------
+//NUMBERS
 for(let i=0;i<numberButtons.length;i++){
         numberButtons[i].addEventListener("click", function(){
             currentInput += numberButtons[i].innerText;
-            
-            //currentInput = "";
-            //displayString += currentInput;
-            //displayArea.innerText = displayString;
-            displayArea.innerText = currentInput;
-            console.log({currentInput}, {userNumber1}, {userNumber2}, {userOperator}, {result});
+            if(userNumber1 == undefined){
+                displayThis = currentInput;
+            }else{
+                displayThis = userNumber1 + " " + userOperator+ " " + currentInput;
+            }
+            displayArea.innerText = displayThis;
     });
 }
-//operators
+
+
+//OPERATORS
 operatorButtons.forEach(element => {
     element.addEventListener("click",function(){
         //must check if userNumber1 and userNumber2 have values, if they do, it means the user is chaining
         //operators, we must evaluate first pair of numbers before continuing
 
         //ensure last character in currentInput is NOT another operator
-        console.log({currentInput});
-
         if(isNaN(currentInput[currentInput.length-1]) === false){
             if(userNumber1 != undefined&&userNumber1 != ""){
-                console.log("Doing This");
                 userNumber2 = parseFloat(currentInput);
-                //userOperator = element.innerText;
                 result = operate(userOperator, userNumber1, userNumber2)
-                userOperator = element.innerText;
                 userNumber1 = result;
                 userNumber2 = "";
-                displayArea.innerText = userOperator;
-                currentInput = "";
             }else{
-                userNumber1 = parseFloat(currentInput);
-                userOperator = element.innerText;
-                displayArea.innerText = userOperator;
-                currentInput = "";                
+                userNumber1 = parseFloat(currentInput);            
             }
-
-
-            //displayString += " "+element.innerText+" ";
-            //displayArea.innerText = currentInput;
-
-
+            userOperator = element.innerText;
+            displayThis += " " + userOperator+ " ";
+            displayArea.innerText = displayThis;
+            currentInput = "";
         }
     });
 });
-//decimal
-decimalButton.addEventListener("click",function(){
-    if(isNaN(currentInput[currentInput.length-1]) === false&&currentInput.includes(".")===false){
-        currentInput += ".";
-    }
-    displayArea.innerText = currentInput;
-});
-//equals
 
+
+//DECIMAL POINT
+decimalButton.addEventListener("click",function(){
+    console.log({currentInput}, {userNumber1});
+    if(currentInput==""){
+        currentInput += "0.";
+    }else if(isNaN(currentInput[currentInput.length-1]) === false&&currentInput.includes(".")===false){
+        currentInput += decimalButton.innerText;
+    }
+
+    //displayArea.innerText = currentInput;
+    if(userNumber1 == undefined){
+        displayThis = currentInput;
+    }else{
+        displayThis = userNumber1 + " " + userOperator+ " " + currentInput;
+    }
+    displayArea.innerText = displayThis;
+});
+
+
+//EQUALS
 equalsButton.addEventListener("click", function(){
-    userNumber2 = parseFloat(currentInput);
-    currentInput = "";
-    result = operate(userOperator, userNumber1, userNumber2);
+    if(userNumber1===undefined){
+        result = "ERROR";
+    }else{
+        userNumber2 = parseFloat(currentInput);
+        currentInput = "";
+        result = operate(userOperator, userNumber1, userNumber2); 
+    }
     displayArea.innerText = result;
 
     clearAll();
-    console.log({currentInput}, {userNumber1}, {userNumber2}, {userOperator}, {result});
 });
 
-//clear
+
+//CLEAR
 clearButton.addEventListener("click",function(){
     clearAll();
     displayArea.innerText = "CALCULATE";
