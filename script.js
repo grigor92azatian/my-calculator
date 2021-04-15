@@ -39,20 +39,31 @@ function operate(operator, firstNum, secondNum){
         return add(firstNum,secondNum);
     }else if(operator==="-"){
         return subtract(firstNum,secondNum);
-    }else if(operator==="*"){
+    }else if(operator==="x"){
         return multiply(firstNum,secondNum);
     }else if(operator==="/"){
         return divide(firstNum,secondNum);
     }
 }
 
-let displayThis = "";
+function clearAll(){
+    displayThis = "";
+    currentInput = "";
+    userOperator = "";
+    userNumber1 = "";
+    userNumber2 = "";
+    result = 0;
+    displayString = "";
+}
+
 let currentInput = "";
 let userOperator;
 let userNumber1;
 let userNumber2;
 let result;
+
 let displayString = "";
+let displayThis = "";
 
 //reference to all buttons
 let numberButtons = [document.querySelector("#zero"), document.querySelector("#one"), document.querySelector("#two"), document.querySelector("#three"), 
@@ -70,26 +81,45 @@ let displayArea = document.querySelector("#display");
 //numbers
 for(let i=0;i<numberButtons.length;i++){
         numberButtons[i].addEventListener("click", function(){
-        displayString += currentInput;
-        currentInput += numberButtons[i].innerText;
-        
-        //currentInput = "";
-        //displayArea.innerText = displayString;
-        console.log({currentInput});
+            currentInput += numberButtons[i].innerText;
+            
+            //currentInput = "";
+            //displayString += currentInput;
+            //displayArea.innerText = displayString;
+            console.log({currentInput}, {userNumber1}, {userNumber2}, {userOperator}, {result});
     });
 }
 //operators
 operatorButtons.forEach(element => {
     element.addEventListener("click",function(){
-        //ensure last character in currentInput is NOT another operator
-        if(isNaN(currentInput[currentInput.length-1]) === false){
-            userNumber1 = parseInt(currentInput);
-            userOperator = element.innerText;
-            currentInput = "";
+        //must check if userNumber1 and userNumber2 have values, if they do, it means the user is chaining
+        //operators, we must evaluate first pair of numbers before continuing
 
-            displayString += " "+element.innerText+" ";
+        //ensure last character in currentInput is NOT another operator
+        console.log({currentInput});
+
+        if(isNaN(currentInput[currentInput.length-1]) === false){
+            console.log(userNumber1);
+            if(userNumber1 != undefined&&userNumber1 != ""){
+                console.log("Doing This");
+                userNumber2 = parseInt(currentInput);
+                //userOperator = element.innerText;
+                result = operate(userOperator, userNumber1, userNumber2)
+                userOperator = element.innerText;
+                userNumber1 = result;
+                userNumber2 = "";
+                currentInput = "";
+            }else{
+                userNumber1 = parseInt(currentInput);
+                userOperator = element.innerText;
+                currentInput = "";                
+            }
+
+
+            //displayString += " "+element.innerText+" ";
             //displayArea.innerText = currentInput;
-            console.log({currentInput});
+
+
         }
     });
 });
@@ -99,20 +129,18 @@ operatorButtons.forEach(element => {
 
 equalsButton.addEventListener("click", function(){
     userNumber2 = parseInt(currentInput);
+    currentInput = "";
     result = operate(userOperator, userNumber1, userNumber2);
-    console.log({userNumber1}, {userNumber2}, {userOperator}, {result});
+    displayArea.innerText = result;
+
+    clearAll();
+    console.log({currentInput}, {userNumber1}, {userNumber2}, {userOperator}, {result});
 });
 
 //clear
 clearButton.addEventListener("click",function(){
-    displayThis = "";
-    currentInput = "";
-    userOperator = "";
-    userNumber1 = "";
-    userNumber2 = "";
-    result = 0;
-    displayString = "";
-    displayArea.innerText = "";
+    clearAll();
+    displayArea.innerText = "CALCULATE";
 });
 
 
@@ -145,5 +173,6 @@ clearButton.addEventListener("click",function(){
     //1. Cannot chain multiple operators consecutively: "234++-223"
     //2. Cannot have more than 1 decimal point in a number: "23.345.3+23"
     //3. 
+
 
 
