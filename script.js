@@ -86,6 +86,7 @@ for(let i=0;i<numberButtons.length;i++){
             //currentInput = "";
             //displayString += currentInput;
             //displayArea.innerText = displayString;
+            displayArea.innerText = currentInput;
             console.log({currentInput}, {userNumber1}, {userNumber2}, {userOperator}, {result});
     });
 }
@@ -99,19 +100,20 @@ operatorButtons.forEach(element => {
         console.log({currentInput});
 
         if(isNaN(currentInput[currentInput.length-1]) === false){
-            console.log(userNumber1);
             if(userNumber1 != undefined&&userNumber1 != ""){
                 console.log("Doing This");
-                userNumber2 = parseInt(currentInput);
+                userNumber2 = parseFloat(currentInput);
                 //userOperator = element.innerText;
                 result = operate(userOperator, userNumber1, userNumber2)
                 userOperator = element.innerText;
                 userNumber1 = result;
                 userNumber2 = "";
+                displayArea.innerText = userOperator;
                 currentInput = "";
             }else{
-                userNumber1 = parseInt(currentInput);
+                userNumber1 = parseFloat(currentInput);
                 userOperator = element.innerText;
+                displayArea.innerText = userOperator;
                 currentInput = "";                
             }
 
@@ -124,11 +126,16 @@ operatorButtons.forEach(element => {
     });
 });
 //decimal
-
+decimalButton.addEventListener("click",function(){
+    if(isNaN(currentInput[currentInput.length-1]) === false&&currentInput.includes(".")===false){
+        currentInput += ".";
+    }
+    displayArea.innerText = currentInput;
+});
 //equals
 
 equalsButton.addEventListener("click", function(){
-    userNumber2 = parseInt(currentInput);
+    userNumber2 = parseFloat(currentInput);
     currentInput = "";
     result = operate(userOperator, userNumber1, userNumber2);
     displayArea.innerText = result;
